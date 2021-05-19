@@ -1,0 +1,19 @@
+void setup()
+{
+  pinMode(2, OUTPUT);     // Let pin 2 drive the pin
+  digitalWrite(2, LOW);   // Tell pin 2 to drive to 0V
+  Serial.begin(9600);     // Let me print things!
+}
+
+void loop()
+{
+  unsigned long startTime = micros();             // Save the start time
+  pinMode(2, INPUT);                              // Release pin 2 - let the capacitor charge
+  while(digitalRead(2) == 0);                     // Wait until the pin reads HIGH
+  unsigned long stopTime = micros();              // Save the stop time
+  long duration = stopTime - startTime;           // Calculate the duration
+  duration = map(duration, 15028, 44936, 100, 0); // Scale the duration to pretty numbers
+  Serial.println(duration);                       // Print the duration
+  pinMode(2, OUTPUT);                             // Tell pin 2 to discharge the capacitor
+  delay(100);                                     // Wait some time
+}
